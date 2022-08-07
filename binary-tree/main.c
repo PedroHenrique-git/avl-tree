@@ -112,7 +112,9 @@ Node * insertNode(Node * node, int element) {
 }
 
 Node * removeNode(Node * node, int element) {
-    if(node == NULL) return NULL;
+    Node * tmp;
+
+    if(node == NULL) return node;
 
     if(compareValues(element, node->value) == LESS_THAN) {
         node->left = removeNode(node->left, element);
@@ -123,14 +125,18 @@ Node * removeNode(Node * node, int element) {
     } else {
         if(node->left == NULL && node->right == NULL) {
             node = NULL;
-            return node;
+            return NULL;
         }
 
         if(node->left == NULL) {
+            tmp = node;
             node = node->right;
+            free(tmp);
             return node;
         } else if(node->right == NULL) {
+            tmp = node;
             node = node->left;
+            free(tmp);
             return node;
         }
 
@@ -202,6 +208,28 @@ int getBalanceFactor(Node * node) {
     }
 }
 
+void printTree(Node * root, int space) {
+    if (root == NULL) return;
+    space += 3;
+    printTree(root->right, space);
+
+    printf("\n");
+    for (int i = 3; i < space; i++) {
+        printf(" ");
+    }
+    printf("%d\n", root->value);
+    printTree(root->left, space);
+
+}
+
+void cleanAvlTree(Node * root) {
+    if (root == NULL) return;
+
+    cleanAvlTree(root->right);
+    cleanAvlTree(root->left);
+    free(root);
+}
+
 void menu(int option, AvlTree * avlTree) {
     int valueOfNode;
 
@@ -214,12 +242,14 @@ void menu(int option, AvlTree * avlTree) {
             scanf("%d", &valueOfNode);
 
             insert(avlTree, valueOfNode);
+            printTree(avlTree->root, 0);
         break;
         case 2:
             printf("\nDigite o valor do no que deseja remover: ");
             scanf("%d", &valueOfNode);
 
             removeFn(avlTree->root, valueOfNode);
+            printTree(avlTree->root, 0);
         break;
         default:
             printf("\nOpcao invalida!\n");
@@ -240,4 +270,7 @@ int main()
 
         menu(option, avlTree);
     } while(option != 0);
+
+    cleanAvlTree(avlTree->root);
+    free(avlTree);
 }
