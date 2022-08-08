@@ -124,8 +124,10 @@ Node * removeNode(Node * node, int element) {
         return node;
     } else {
         if(node->left == NULL && node->right == NULL) {
+            tmp = node;
             node = NULL;
-            return NULL;
+            free(tmp);
+            return node;
         }
 
         if(node->left == NULL) {
@@ -210,11 +212,12 @@ int getBalanceFactor(Node * node) {
 
 void printTree(Node * root, int space) {
     if (root == NULL) return;
-    space += 3;
+    const int spacer = 3;
+    space += spacer;
     printTree(root->right, space);
 
     printf("\n");
-    for (int i = 3; i < space; i++) {
+    for (int i = spacer; i < space; i++) {
         printf(" ");
     }
     printf("%d\n", root->value);
@@ -248,7 +251,7 @@ void menu(int option, AvlTree * avlTree) {
             printf("\nDigite o valor do no que deseja remover: ");
             scanf("%d", &valueOfNode);
 
-            removeFn(avlTree->root, valueOfNode);
+            avlTree->root = removeFn(avlTree->root, valueOfNode);
             printTree(avlTree->root, 0);
         break;
         default:
