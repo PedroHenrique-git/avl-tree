@@ -150,6 +150,18 @@ Node * removeNode(Node * node, int element) {
     }
 }
 
+Node * searchNode(Node * node, int element) {
+    if(node == NULL) return NULL;
+
+    if(compareValues(element, node->value) == LESS_THAN) {
+        return searchNode(node->left, element);
+    } else if(compareValues(element, node->value) == GREATER_THAN) {
+        return searchNode(node->right, element);
+    }
+
+    return node;
+}
+
 void insert(AvlTree * avlTree, int element) {
     avlTree->root = insertNode(avlTree->root, element);
 }
@@ -254,6 +266,20 @@ void menu(int option, AvlTree * avlTree) {
             avlTree->root = removeFn(avlTree->root, valueOfNode);
             printTree(avlTree->root, 0);
         break;
+        case 3:
+            printf("\nDigite o valor que deseja buscar: ");
+            scanf("%d", &valueOfNode);
+
+            Node * searchedNode = searchNode(avlTree->root, valueOfNode);
+
+            if(searchedNode != NULL) {
+                printf("\nValor existe na arvore\n");
+            } else {
+                printf("\nValor nao existe na arvore\n");
+            }
+
+            printTree(avlTree->root, 0);
+        break;
         default:
             printf("\nOpcao invalida!\n");
         break;
@@ -268,7 +294,7 @@ int main()
     AvlTree * avlTree = createTree();
 
     do {
-        printf("0 - Encerrar o programa\n1 - Inserir no na arvore\n2 - Remover no da arvore\n\n");
+        printf("0 - Encerrar o programa\n1 - Inserir no na arvore\n2 - Remover no da arvore\n3 - Buscar valor na arvore\n\n");
         scanf("%d", &option);
 
         menu(option, avlTree);
