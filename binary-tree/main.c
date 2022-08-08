@@ -285,7 +285,7 @@ void menu(int option, AvlTree * avlTree) {
             printf("\nDigite o valor do no que deseja remover: ");
             scanf("%d", &valueOfNode);
 
-            removeFn(avlTree->root, valueOfNode);
+            avlTree->root = removeFn(avlTree->root, valueOfNode);
             printTree(avlTree->root, 0);
         break;
         case 3:
