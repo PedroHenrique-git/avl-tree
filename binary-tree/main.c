@@ -124,10 +124,8 @@ Node * removeNode(Node * node, int element) {
         return node;
     } else {
         if(node->left == NULL && node->right == NULL) {
-            tmp = node;
             node = NULL;
-            free(tmp);
-            return node;
+            return NULL;
         }
 
         if(node->left == NULL) {
@@ -212,12 +210,11 @@ int getBalanceFactor(Node * node) {
 
 void printTree(Node * root, int space) {
     if (root == NULL) return;
-    const int spacer = 3;
-    space += spacer;
+    space += 3;
     printTree(root->right, space);
 
     printf("\n");
-    for (int i = spacer; i < space; i++) {
+    for (int i = 3; i < space; i++) {
         printf(" ");
     }
     printf("%d\n", root->value);
@@ -233,8 +230,45 @@ void cleanAvlTree(Node * root) {
     free(root);
 }
 
+Node * searchNode(Node * node, int element) {
+    if(node == NULL) return NULL;
+
+    if(compareValues(element, node->value) == LESS_THAN) {
+        return searchNode(node->left, element);
+    } else if(compareValues(element, node->value) == GREATER_THAN) {
+        return searchNode(node->right, element);
+    }
+
+    return node;
+}
+
+void preOrder(Node * node) {
+    if(node != NULL) {
+        printf("%d ", node->value);
+        preOrder(node->left);
+        preOrder(node->right);
+    }
+}
+
+void posOrder(Node * node) {
+    if(node != NULL) {
+        preOrder(node->left);
+        printf("%d ", node->value);
+        preOrder(node->right);
+    }
+}
+
+void simetricOrder(Node * node) {
+    if(node != NULL) {
+        preOrder(node->left);
+        preOrder(node->right);
+        printf("%d ", node->value);
+    }
+}
+
 void menu(int option, AvlTree * avlTree) {
     int valueOfNode;
+    Node * searchResult;
 
     switch(option) {
         case 0:
@@ -251,10 +285,39 @@ void menu(int option, AvlTree * avlTree) {
             printf("\nDigite o valor do no que deseja remover: ");
             scanf("%d", &valueOfNode);
 
-            avlTree->root = removeFn(avlTree->root, valueOfNode);
+            removeFn(avlTree->root, valueOfNode);
             printTree(avlTree->root, 0);
         break;
+        case 3:
+            printf("\nDigite o valor que voce deseja pesquisar: ");
+            scanf("%d", &valueOfNode);
+
+            searchResult = searchNode(avlTree->root, valueOfNode);
+
+            if(searchResult != NULL) {
+                printf("\n Valor existe na arvore \n");
+            } else {
+                printf("\n Valor nao existe na arvore \n");
+            }
+
+        break;
+        case 4:
+            printf("\n");
+                preOrder(avlTree->root);
+            printf("\n");
+        break;
+        case 5:
+            printf("\n");
+                posOrder(avlTree->root);
+            printf("\n");
+        break;
+        case 6:
+            printf("\n");
+                simetricOrder(avlTree->root);
+            printf("\n");
+        break;
         default:
+
             printf("\nOpcao invalida!\n");
         break;
     }
@@ -268,7 +331,7 @@ int main()
     AvlTree * avlTree = createTree();
 
     do {
-        printf("0 - Encerrar o programa\n1 - Inserir no na arvore\n2 - Remover no da arvore\n\n");
+        printf("0 - Encerrar o programa\n1 - Inserir no na arvore\n2 - Remover no da arvore\n3 - Pesquisar valor\n4 - Percuso em Pre-order\n5 - Percuso em Pos-ordem\n6 - Percuso em ordem simetrica\n\n");
         scanf("%d", &option);
 
         menu(option, avlTree);
