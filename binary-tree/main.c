@@ -210,11 +210,12 @@ int getBalanceFactor(Node * node) {
 
 void printTree(Node * root, int space) {
     if (root == NULL) return;
-    space += 3;
+    const int spacer = 3;
+    space += spacer;
     printTree(root->right, space);
 
     printf("\n");
-    for (int i = 3; i < space; i++) {
+    for (int i = spacer; i < space; i++) {
         printf(" ");
     }
     printf("%d\n", root->value);
