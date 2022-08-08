@@ -124,8 +124,10 @@ Node * removeNode(Node * node, int element) {
         return node;
     } else {
         if(node->left == NULL && node->right == NULL) {
+            tmp = node;
             node = NULL;
-            return NULL;
+            free(tmp);
+            return node;
         }
 
         if(node->left == NULL) {
